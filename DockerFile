@@ -1,17 +1,14 @@
-FROM ubuntu:latest AS build
+# Fetching latest version of Java
+FROM ubuntu:17
+ 
+# Setting up work directory
+WORKDIR /app
 
-RUN apt-get update 
-RUN apt-get install openjdk-17-jdk -y
+# Copy the jar file into our app
+COPY ./target/todolist-1.0.0.jar /app
 
-FROM openjdk:17-jdk-slim
-
-COPY . . 
-
-RUN apt-get install maven -y
-RUN mvn clean install
-
+# Exposing port 8080
 EXPOSE 8080
 
-COPY --from=build /target/todolist-1.0.0.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+# Starting the application
+CMD ["java", "-jar", "todolist-1.0.0.jar"]
